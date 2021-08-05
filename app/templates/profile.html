@@ -1,0 +1,48 @@
+{% extends "layouts/layout.html" %}
+{% block content %}
+    <form method="post">
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input class="form-control" id="username" name="username" type="text" placeholder="Username" value="{{ user.username }}">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="Location">Location</label>
+    <input type="text" class="form-control" id="location" name="location" aria-describedby="location" placeholder="Enter Location" value="{{ user.location | default('', true) }}">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="about_me">About Me</label>
+    <textarea id="about_me" name="about_me" cols="40" rows="5">{{ user.about_me | default('', true) }}</textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{# 文章 #}
+<ul>
+    {% for post in posts %}
+        <ul>
+            <li>{{ post.users.username }}</li>
+            <li>{{ post.body }}</li>
+            <li>{{ post.timestamp }}</li>
+            </div>
+        </ul>
+    {% endfor %}
+</ul>
+{# 追蹤動作 #}
+{% if current_user.can(Permission.FOLLOW) and user != current_user %}
+    {% if not current_user.is_following(user) %}
+        <button onclick="window.location.href='{{ url_for('users.follow', user_uuid=user.uuid) }}'">Follow</button>
+    {% else %}
+        <button onclick="window.location.href='{{ url_for('users.follow', user_uuid=user.uuid) }}'">Unfollow</button>
+    {% endif %}
+{% endif %}
+{# 追蹤狀態 #}
+{% if current_user.is_authenticated and user != current_user and user.is_following(current_user) %}
+    <p>此人已追蹤你</p>
+{% endif %}
+{# 追蹤人數 #}
+<a href="{{ url_for('users.followers', user_uuid=user.uuid) }}">Followers number: {{ user.followers.count() }}</a>
+<div>
+    <a href="{{ url_for('users.followed', user_uuid=user.uuid) }}">Following number: {{ user.followed.count() }}</a>
+</div>
+{% endblock %}

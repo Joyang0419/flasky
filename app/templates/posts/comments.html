@@ -1,0 +1,42 @@
+{% extends "layouts/layout.html" %}
+{% block content %}
+<h1>Post</h1>
+<h6>content</h6>
+<p>{{ post.body_html | safe }}</p>
+<h1>Comments</h1>
+<h6>comments total number: {{ post.comments.count() }}</h6>
+{# 分頁項目 #}
+{% for comment in pagination.items %}
+    <p>username: {{ comment.users.username }}</p>
+    {{ comment.body_html | safe }}
+    <p>disabled status: {{ comment.disabled }}</p>
+    <button onclick="window.location.href='{{ url_for('posts.change_comment_disabled_status', comment_id=comment.id) }}'">change disabled status</button>
+    {{ comment.timestamp }}
+{% endfor %}
+{# 分頁器 #}
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        {# 上一頁 #}
+        {% if not pagination.has_prev %}
+            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+        {% else %}
+            <li class="page-item"><a class="page-link" href="{{ url_for(endpoint, page=pagination.page - 1, post_id=post.id) }}">Previous</a></li>
+        {% endif %}
+        {# 所有頁面 #}
+        {% for each_page in pagination.iter_pages(left_edge=pagination.pages) %}
+            {% if each_page ==pagination.page %}
+                {# 當前頁面 #}
+                <li class="page-item active"><a class="page-link" href="{{ url_for(endpoint, page=each_page, post_id=post.id) }}#">{{ each_page }}</a></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="{{ url_for(endpoint, page=each_page, post_id=post.id) }}#">{{ each_page }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {# 下一頁 #}
+        {% if not pagination.has_next %}
+            <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+        {% else %}
+            <li class="page-item"><a class="page-link" href="{{ url_for(endpoint, page=pagination.page + 1, post_id=post.id) }}">Next</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "layouts/layout.html" %}
+{% block content %}
+    {{ post.id }}
+    {{ post.timestamp }}
+    <div>
+        {{ post.body | safe }}
+    </div>
+    <form method="post">
+        <div>
+          <p>Text</p>
+          <textarea rows="3" name="body"></textarea>
+        </div>
+        <div>
+          <button type="submit">Submit</button>
+        </div>
+    </form>
+{% endblock %}

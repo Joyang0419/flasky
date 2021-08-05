@@ -13,16 +13,23 @@ if os.path.exists(dotenv_path):
 class Config:
     # 密鑰
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'  # 可以從環境變數匯入，或是使用預設值
-    # e-mail
-    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.googleapis.com')
-    MAIL_PORT = int(os.environ.get('MAIL_PORT', '587'))
+    # Mail-SMTP Server 設定
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 465
+    MAIL_DEBUG = 0
     MAIL_USE_SSL = True
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    MAIL_SUBJECT_PREFIX = os.environ.get('MAIL_SUBJECT_PREFIX')
-    MAIL_DEFAULT_SENDER = (os.getenv('MAIL_USER'), os.getenv('MAIL_USERNAME'))
+    MAIL_DEFAULT_SENDER = ('Joy', 'joe_1201@reddoor.com.tw'),
+    MAIL_USERNAME = os.getenv('MAIL_USERNAME')
+    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
     # Database
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    # Cache REDIS
+    CACHE_TYPE = os.getenv('CACHE_TYPE')
+    CACHE_REDIS_HOST = os.getenv('REDIS_HOST')
+    CACHE_REDIS_PORT = os.getenv('REDIS_PORT')
+    CACHE_REDIS_DB = os.getenv('REDIS_CHANNEL')
+    CACHE_KEY_PREFIX = os.getenv('CACHE_KEY_PREFIX')
+    CACHE_DEFAULT_TIMEOUT = os.getenv('CACHE_DEFAULT_TIMEOUT')
 
     # 實作空的init_app()方法
     @staticmethod
